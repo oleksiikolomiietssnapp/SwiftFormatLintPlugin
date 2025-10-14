@@ -46,7 +46,7 @@ The lint plugin runs automatically before every build. Just add it to your targe
 .target(
     name: "YourTarget",
     plugins: [
-        .plugin(name: "SwiftFormatPlugin", package: "SwiftFormatPlugin")
+        .plugin(name: "SwiftFormatPlugin", package: "SwiftFormatLintPlugin")
     ]
 )
 ```
