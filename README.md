@@ -8,7 +8,7 @@ A reusable Swift Package Manager plugin that integrates swift-format linting and
 - **Manual Formatting**: Format Swift files on-demand with the Format plugin
 - **Parallel Processing**: Uses `--parallel` flag for faster performance
 - **Dual Config Support**: Works with both `.swiftformat` and `.swift-format` files
-- **Xcode Compatible**: Works with both SPM and Xcode projects
+- **SPM & Xcode Project Support**: Works with Swift packages and Xcode projects (Xcode 14+)
 - **Better Diagnostics**: Shows which configuration file is being used
 - **Zero Configuration**: Just add as a dependency and go
 
@@ -68,6 +68,24 @@ swift package plugin --allow-writing-to-package-directory FormatPlugin YourTarge
 2. Select "FormatPlugin" from the plugins menu
 3. Approve the permission to modify files
 
+## Xcode Project Setup
+
+The plugin supports Xcode projects via `XcodeBuildToolPlugin` (Xcode 14+), but requires additional manual setup:
+
+1. **Add package dependency**: File → Add Package Dependencies → Add SwiftFormatLintPlugin
+
+2. **Enable plugin for each target**:
+   - Select target → Build Phases → Run Build Tool Plug-ins
+   - Click "+" and add "SwiftFormatPlugin"
+
+3. **Add config file to project**:
+   - Create `.swiftformat` in your project directory
+   - Add the file to Xcode project (not just filesystem) so the plugin can discover it
+
+4. **Verify swift-format**: Run `swift-format --version` to confirm installation
+
+**Note**: Unlike SPM packages (automatic), Xcode projects require explicit Build Phase configuration.
+
 ## Configuration
 
 Create a `.swiftformat` or `.swift-format` configuration file in your package root. Example:
@@ -89,6 +107,7 @@ Create a `.swiftformat` or `.swift-format` configuration file in your package ro
 
 - Swift 6.0 or later
 - swift-format tool installed (included in Xcode or available via Swift toolchain)
+- Xcode 14 or later (for Xcode project support via XcodeBuildToolPlugin)
 
 ## License
 
