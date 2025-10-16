@@ -16,6 +16,10 @@ let package = Package(
         )
     ],
     targets: [
+        .target(
+            name: "SwiftFormatLintPlugin",
+            path: "BuildSupport"
+        ),
         .plugin(
             name: "SwiftFormatPlugin",
             capability: .buildTool()
