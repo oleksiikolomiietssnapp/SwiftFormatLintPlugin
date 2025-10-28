@@ -23,7 +23,7 @@ import PackageDescription
 let package = Package(
     name: "YourPackage",
     dependencies: [
-        .package(url: "https://github.com/yourusername/SwiftFormatLintPlugin.git", from: "1.0.0")
+        .package(url: "https://github.com/oleksiikolomiietssnapp/SwiftFormatLintPlugin.git", exact: "1.0.2")
     ],
     targets: [
         .target(
