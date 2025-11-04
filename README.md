@@ -1,46 +1,24 @@
 # SwiftFormatLintPlugin
 
-A reusable Swift Package Manager plugin that integrates swift-format linting and formatting into your workflow.
+A Swift Package Manager plugin that integrates swift-format linting and formatting into your build pipeline.
 
 ## Features
 
 - **Automatic Linting**: Runs swift-format lint checks before every build
-- **Manual Formatting**: Format Swift files on-demand with the Format plugin
+- **Manual Formatting**: Format Swift files on-demand via command plugin
 - **Parallel Processing**: Uses `--parallel` flag for faster performance
 - **Dual Config Support**: Works with both `.swiftformat` and `.swift-format` files
-- **SPM & Xcode Project Support**: Works with Swift packages and Xcode projects (Xcode 14+)
-- **Better Diagnostics**: Shows which configuration file is being used
-- **Zero Configuration**: Just add as a dependency and go
+- **SPM & Xcode Support**: Works with Swift packages and Xcode projects (Xcode 14+)
 
 ## Installation
 
-Add this plugin as a dependency to your `Package.swift`:
+Add to your `Package.swift`:
 
 ```swift
-// swift-tools-version: 6.0
-import PackageDescription
-
-let package = Package(
-    name: "YourPackage",
-    dependencies: [
-        .package(url: "https://github.com/Snapp-Mobile/SwiftFormatLintPlugin.git", from: "1.0.3")
-    ],
-    targets: [
-        .target(
-            name: "YourTarget",
-            plugins: [
-                .plugin(name: "SwiftFormatPlugin", package: "SwiftFormatLintPlugin")
-            ]
-        )
-    ]
-)
+.package(url: "https://github.com/Snapp-Mobile/SwiftFormatLintPlugin.git", from: "1.0.3")
 ```
 
-## Usage
-
-### Lint Plugin (Automatic)
-
-The lint plugin runs automatically before every build. Just add it to your target's plugins and it will check your code:
+Enable the lint plugin in your target:
 
 ```swift
 .target(
@@ -51,9 +29,11 @@ The lint plugin runs automatically before every build. Just add it to your targe
 )
 ```
 
+## Usage
+
 ### Format Plugin (Manual)
 
-The format plugin can be run manually to auto-fix formatting issues:
+Run manually to auto-fix formatting issues:
 
 ```bash
 # Format all targets
@@ -68,27 +48,19 @@ swift package plugin --allow-writing-to-package-directory FormatPlugin YourTarge
 2. Select "FormatPlugin" from the plugins menu
 3. Approve the permission to modify files
 
-## Xcode Project Setup
+## Xcode Projects
 
-The plugin supports Xcode projects via `XcodeBuildToolPlugin` (Xcode 14+), but requires additional manual setup:
+SPM plugins work automatically in Swift packages. For Xcode projects (Xcode 14+):
 
-1. **Add package dependency**: File → Add Package Dependencies → Add SwiftFormatLintPlugin
-
-2. **Enable plugin for each target**:
-   - Select target → Build Phases → Run Build Tool Plug-ins
-   - Click "+" and add "SwiftFormatPlugin"
-
-3. **Add config file to project**:
-   - Create `.swiftformat` in your project directory
-   - Add the file to Xcode project (not just filesystem) so the plugin can discover it
-
-4. **Verify swift-format**: Run `swift-format --version` to confirm installation
-
-**Note**: Unlike SPM packages (automatic), Xcode projects require explicit Build Phase configuration.
+1. File → Add Package Dependencies → Add SwiftFormatLintPlugin
+2. Select target → Build Phases → Run Build Tool Plug-ins → "+" → Add "SwiftFormatPlugin"
+3. Create `.swiftformat` in your project root and add it to Xcode project (not just filesystem)
 
 ## Configuration
 
-Create a `.swiftformat` or `.swift-format` configuration file in your package root. Example:
+Create a `.swiftformat` configuration file in your package root. See [swift-format documentation](https://github.com/apple/swift-format) for full options.
+
+Example:
 
 ```json
 {
@@ -97,17 +69,15 @@ Create a `.swiftformat` or `.swift-format` configuration file in your package ro
   "indentation": {
     "spaces": 4
   },
-  "respectsExistingLineBreaks": true,
-  "lineBreakBeforeControlFlowKeywords": false,
-  "lineBreakBeforeEachArgument": false
+  "respectsExistingLineBreaks": true
 }
 ```
 
 ## Requirements
 
-- Swift 6.0 or later
-- swift-format tool installed (included in Xcode or available via Swift toolchain)
-- Xcode 14 or later (for Xcode project support via XcodeBuildToolPlugin)
+- Swift 6.0+
+- swift-format tool (included in Xcode)
+- Xcode 14+ (for Xcode project support)
 
 ## License
 
