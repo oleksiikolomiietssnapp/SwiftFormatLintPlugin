@@ -83,25 +83,29 @@ struct FormatPlugin: CommandPlugin {
         process.standardOutput = outputPipe
         process.standardError = errorPipe
 
-        try process.run()
-        process.waitUntilExit()
+        do {
+            try process.run()
+            process.waitUntilExit()
 
-        // Handle output
-        let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-        let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+            // Handle output
+            let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+            let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
 
-        if let output = String(data: outputData, encoding: .utf8), !output.isEmpty {
-            print(output)
-        }
+            if let output = String(data: outputData, encoding: .utf8), !output.isEmpty {
+                Diagnostics.remark(output)
+            }
 
-        if let errorOutput = String(data: errorData, encoding: .utf8), !errorOutput.isEmpty {
-            printError(errorOutput)
-        }
+            if let errorOutput = String(data: errorData, encoding: .utf8), !errorOutput.isEmpty {
+                printError(errorOutput)
+            }
 
-        if process.terminationStatus == 0 {
-            print("✅ Formatting completed successfully!")
-        } else {
-            Diagnostics.error("swift-format failed with exit code \(process.terminationStatus)")
+            if process.terminationStatus == 0 {
+                Diagnostics.remark("Formatting completed successfully!")
+            } else {
+                Diagnostics.error("swift-format failed with exit code \(process.terminationStatus)")
+            }
+        } catch {
+            Diagnostics.error("Failed to execute swift-format: \(error.localizedDescription)")
         }
     }
 
