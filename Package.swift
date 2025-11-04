@@ -10,11 +10,11 @@ let package = Package(
     name: "SwiftFormatLintPlugin",
     products: [
         .plugin(
-            name: "SwiftFormatPlugin",
+            name: "Lint",
             targets: ["SwiftFormatPlugin"]
         ),
         .plugin(
-            name: "FormatPlugin",
+            name: "Format",
             targets: ["FormatPlugin"]
         )
     ],
