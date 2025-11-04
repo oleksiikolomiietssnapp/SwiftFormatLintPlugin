@@ -85,6 +85,52 @@ Example:
 - swift-format tool (included in Xcode)
 - Xcode 14+ (for Xcode project support)
 
+## Troubleshooting
+
+### "swift-format not found" error
+
+The plugin requires swift-format to be installed in your Swift toolchain.
+
+**Solution:**
+- Ensure you have a recent Swift version installed (6.0+)
+- swift-format is included with Xcode
+- Run `swift-format --version` to verify it's available
+
+### Build hangs with Lint plugin
+
+The Lint plugin has a 5-minute timeout to prevent indefinite hangs, but extremely slow disk I/O could cause delays.
+
+**Solution:**
+- Check if your disk is full: `df -h`
+- Try building a smaller target first
+- Disable other background processes consuming I/O
+
+### "Configuration file not found" warning
+
+This is normal if you don't have a `.swiftformat` configuration file. The plugin will use swift-format's default rules.
+
+**Solution (optional):**
+- Create `.swiftformat` in your package root to customize rules
+- See [swift-format documentation](https://github.com/apple/swift-format) for configuration options
+
+### FormatPlugin fails with "Permission denied"
+
+The Format plugin needs write permission to your source files.
+
+**Solution:**
+- Ensure your project files are writable: `ls -l Sources/`
+- Approve the permission prompt when running the plugin
+- Check disk permissions: `chmod u+w Sources/**/*.swift`
+
+### No output from Lint plugin during build
+
+This is normal behavior. The Lint plugin runs silently unless there are formatting issues.
+
+**To verify it's running:**
+- Build with verbose output: `swift build -v`
+- Look for "Running SwiftFormat Lint" in the output
+- The plugin will show warnings if formatting issues are found
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) file.

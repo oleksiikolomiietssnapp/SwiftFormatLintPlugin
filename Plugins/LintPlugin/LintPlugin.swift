@@ -25,6 +25,8 @@ struct LintPlugin: BuildToolPlugin {
             .filter { $0.type == .source && $0.url.pathExtension == "swift" }
             .map { $0.url }
 
+        Diagnostics.remark("Linting \(swiftSourceFiles.count) Swift file(s)...")
+
         guard !swiftSourceFiles.isEmpty else {
             return []
         }
@@ -67,15 +69,16 @@ struct LintPlugin: BuildToolPlugin {
     /// Finds configuration file in package root.
     /// Supports both .swiftformat and .swift-format naming conventions.
     private func findConfigurationFile(in packageDirectory: URL) -> URL? {
+        let fileManager = FileManager.default
         let swiftformatConfig = packageDirectory.appending(path: ".swiftformat")
         let swiftFormatConfig = packageDirectory.appending(path: ".swift-format")
 
         // Prefer .swiftformat first
-        if FileManager.default.fileExists(atPath: swiftformatConfig.path) {
+        if fileManager.fileExists(atPath: swiftformatConfig.path) {
             return swiftformatConfig
         }
         // Fall back to .swift-format
-        if FileManager.default.fileExists(atPath: swiftFormatConfig.path) {
+        if fileManager.fileExists(atPath: swiftFormatConfig.path) {
             return swiftFormatConfig
         }
 
@@ -94,6 +97,8 @@ extension LintPlugin: XcodeBuildToolPlugin {
         let swiftSourceFiles = target.inputFiles
             .filter { $0.type == .source && $0.url.pathExtension == "swift" }
             .map { $0.url }
+
+        Diagnostics.remark("Linting \(swiftSourceFiles.count) Swift file(s) in Xcode project...")
 
         guard !swiftSourceFiles.isEmpty else {
             return []

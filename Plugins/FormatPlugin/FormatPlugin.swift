@@ -71,7 +71,7 @@ struct FormatPlugin: CommandPlugin {
         formatArguments += allSourceFiles.map { $0.path(percentEncoded: false) }
 
         // Print what we're about to do
-        print("Formatting \(allSourceFiles.count) Swift files in \(targetsToFormat.count) target(s)...")
+        Diagnostics.remark("Formatting \(allSourceFiles.count) Swift files in \(targetsToFormat.count) target(s)...")
 
         // Execute swift-format
         let process = Process()
@@ -83,50 +83,61 @@ struct FormatPlugin: CommandPlugin {
         process.standardOutput = outputPipe
         process.standardError = errorPipe
 
-        try process.run()
-        process.waitUntilExit()
+        do {
+            try process.run()
 
-        // Handle output
-        let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
-        let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+            // Wait for process with 5-minute timeout
+            let timeout: TimeInterval = 300  // 5 minutes
+            let deadline = Date().addingTimeInterval(timeout)
 
-        if let output = String(data: outputData, encoding: .utf8), !output.isEmpty {
-            print(output)
-        }
+            while process.isRunning && Date() < deadline {
+                try await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
+            }
 
-        if let errorOutput = String(data: errorData, encoding: .utf8), !errorOutput.isEmpty {
-            printError(errorOutput)
-        }
+            if process.isRunning {
+                process.terminate()
+                Diagnostics.error("swift-format timed out after \(Int(timeout))s and was terminated")
+                return
+            }
 
-        if process.terminationStatus == 0 {
-            print("✅ Formatting completed successfully!")
-        } else {
-            Diagnostics.error("swift-format failed with exit code \(process.terminationStatus)")
+            // Handle output
+            let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
+            let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
+
+            if let output = String(data: outputData, encoding: .utf8), !output.isEmpty {
+                Diagnostics.remark(output)
+            }
+
+            if let errorOutput = String(data: errorData, encoding: .utf8), !errorOutput.isEmpty {
+                Diagnostics.warning(errorOutput)
+            }
+
+            if process.terminationStatus == 0 {
+                Diagnostics.remark("Formatting completed successfully!")
+            } else {
+                Diagnostics.error("swift-format failed with exit code \(process.terminationStatus)")
+            }
+        } catch {
+            Diagnostics.error("Failed to execute swift-format: \(error.localizedDescription)")
         }
     }
 
     /// Finds configuration file in package root.
     /// Supports both .swiftformat and .swift-format naming conventions.
     private func findConfigurationFile(in packageDirectory: URL) -> URL? {
+        let fileManager = FileManager.default
         let swiftformatConfig = packageDirectory.appending(path: ".swiftformat")
         let swiftFormatConfig = packageDirectory.appending(path: ".swift-format")
 
         // Prefer .swiftformat first
-        if FileManager.default.fileExists(atPath: swiftformatConfig.path) {
+        if fileManager.fileExists(atPath: swiftformatConfig.path) {
             return swiftformatConfig
         }
         // Fall back to .swift-format
-        if FileManager.default.fileExists(atPath: swiftFormatConfig.path) {
+        if fileManager.fileExists(atPath: swiftFormatConfig.path) {
             return swiftFormatConfig
         }
 
         return nil
-    }
-}
-
-// Helper for printing to stderr
-fileprivate func printError(_ message: String) {
-    if let data = message.data(using: .utf8) {
-        FileHandle.standardError.write(data)
     }
 }
