@@ -25,6 +25,8 @@ struct LintPlugin: BuildToolPlugin {
             .filter { $0.type == .source && $0.url.pathExtension == "swift" }
             .map { $0.url }
 
+        Diagnostics.remark("Linting \(swiftSourceFiles.count) Swift file(s)...")
+
         guard !swiftSourceFiles.isEmpty else {
             return []
         }
@@ -95,6 +97,8 @@ extension LintPlugin: XcodeBuildToolPlugin {
         let swiftSourceFiles = target.inputFiles
             .filter { $0.type == .source && $0.url.pathExtension == "swift" }
             .map { $0.url }
+
+        Diagnostics.remark("Linting \(swiftSourceFiles.count) Swift file(s) in Xcode project...")
 
         guard !swiftSourceFiles.isEmpty else {
             return []
