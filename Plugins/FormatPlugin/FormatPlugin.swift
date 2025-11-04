@@ -71,7 +71,7 @@ struct FormatPlugin: CommandPlugin {
         formatArguments += allSourceFiles.map { $0.path(percentEncoded: false) }
 
         // Print what we're about to do
-        print("Formatting \(allSourceFiles.count) Swift files in \(targetsToFormat.count) target(s)...")
+        Diagnostics.remark("Formatting \(allSourceFiles.count) Swift files in \(targetsToFormat.count) target(s)...")
 
         // Execute swift-format
         let process = Process()
@@ -109,7 +109,7 @@ struct FormatPlugin: CommandPlugin {
             }
 
             if let errorOutput = String(data: errorData, encoding: .utf8), !errorOutput.isEmpty {
-                printError(errorOutput)
+                Diagnostics.warning(errorOutput)
             }
 
             if process.terminationStatus == 0 {
@@ -139,12 +139,5 @@ struct FormatPlugin: CommandPlugin {
         }
 
         return nil
-    }
-}
-
-// Helper for printing to stderr
-fileprivate func printError(_ message: String) {
-    if let data = message.data(using: .utf8) {
-        FileHandle.standardError.write(data)
     }
 }
