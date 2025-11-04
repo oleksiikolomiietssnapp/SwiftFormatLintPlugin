@@ -23,7 +23,7 @@ import PackageDescription
 let package = Package(
     name: "YourPackage",
     dependencies: [
-        .package(url: "https://github.com/yourusername/SwiftFormatLintPlugin.git", from: "1.0.0")
+        .package(url: "https://github.com/Snapp-Mobile/SwiftFormatLintPlugin.git", from: "1.0.3")
     ],
     targets: [
         .target(
