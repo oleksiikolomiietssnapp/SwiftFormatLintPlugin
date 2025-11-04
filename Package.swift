@@ -1,5 +1,8 @@
 // swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
+//
+// Copyright (c) 2025 Snapp Mobile Germany GmbH
+// SPDX-License-Identifier: MIT
 
 import PackageDescription
 

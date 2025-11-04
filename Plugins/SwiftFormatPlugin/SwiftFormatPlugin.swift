@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Oleksii Kolomiiets
+// Copyright (c) 2025 Snapp Mobile Germany GmbH
 // SPDX-License-Identifier: MIT
 
 import Foundation
