@@ -67,15 +67,16 @@ struct LintPlugin: BuildToolPlugin {
     /// Finds configuration file in package root.
     /// Supports both .swiftformat and .swift-format naming conventions.
     private func findConfigurationFile(in packageDirectory: URL) -> URL? {
+        let fileManager = FileManager.default
         let swiftformatConfig = packageDirectory.appending(path: ".swiftformat")
         let swiftFormatConfig = packageDirectory.appending(path: ".swift-format")
 
         // Prefer .swiftformat first
-        if FileManager.default.fileExists(atPath: swiftformatConfig.path) {
+        if fileManager.fileExists(atPath: swiftformatConfig.path) {
             return swiftformatConfig
         }
         // Fall back to .swift-format
-        if FileManager.default.fileExists(atPath: swiftFormatConfig.path) {
+        if fileManager.fileExists(atPath: swiftFormatConfig.path) {
             return swiftFormatConfig
         }
 
