@@ -85,7 +85,20 @@ struct FormatPlugin: CommandPlugin {
 
         do {
             try process.run()
-            process.waitUntilExit()
+
+            // Wait for process with 5-minute timeout
+            let timeout: TimeInterval = 300  // 5 minutes
+            let deadline = Date().addingTimeInterval(timeout)
+
+            while process.isRunning && Date() < deadline {
+                try await Task.sleep(nanoseconds: 100_000_000)  // 0.1 seconds
+            }
+
+            if process.isRunning {
+                process.terminate()
+                Diagnostics.error("swift-format timed out after \(Int(timeout))s and was terminated")
+                return
+            }
 
             // Handle output
             let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile()
