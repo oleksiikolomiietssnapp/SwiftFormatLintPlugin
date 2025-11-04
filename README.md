@@ -30,6 +30,13 @@ Add the `Lint` plugin to your target to automatically check formatting during bu
 )
 ```
 
+The plugin folder structure reflects this naming:
+```
+Plugins/
+├── LintPlugin/     (build tool - runs lint checks)
+└── FormatPlugin/   (command plugin - manual formatting)
+```
+
 ## Manual Formatting (Optional)
 
 The `Format` command plugin auto-fixes formatting issues on-demand:

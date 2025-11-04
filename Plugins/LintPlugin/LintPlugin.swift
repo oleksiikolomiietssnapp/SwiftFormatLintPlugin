@@ -10,7 +10,7 @@ import XcodeProjectPlugin
 /// A build tool plugin that runs swift-format linting on Swift source files.
 /// Supports both Swift Package Manager and Xcode projects.
 @main
-struct SwiftFormatPlugin: BuildToolPlugin {
+struct LintPlugin: BuildToolPlugin {
     /// This entry point is called when operating on a Swift package.
     func createBuildCommands(context: PluginContext, target: Target) throws -> [Command] {
         // Get swift-format tool from the toolchain
@@ -84,7 +84,7 @@ struct SwiftFormatPlugin: BuildToolPlugin {
 }
 
 #if canImport(XcodeProjectPlugin)
-extension SwiftFormatPlugin: XcodeBuildToolPlugin {
+extension LintPlugin: XcodeBuildToolPlugin {
     /// Entry point for Xcode project targets.
     func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
         // Get swift-format tool from the toolchain

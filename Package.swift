@@ -11,7 +11,7 @@ let package = Package(
     products: [
         .plugin(
             name: "Lint",
-            targets: ["SwiftFormatPlugin"]
+            targets: ["LintPlugin"]
         ),
         .plugin(
             name: "Format",
@@ -24,7 +24,7 @@ let package = Package(
             path: "BuildSupport"
         ),
         .plugin(
-            name: "SwiftFormatPlugin",
+            name: "LintPlugin",
             capability: .buildTool()
         ),
         .plugin(
