@@ -85,7 +85,7 @@ MyApp/                          ← Project folder (NOT here)
 
 ## Configuration
 
-Create a `.swiftformat` configuration file in your source folder. See [swift-format documentation](https://github.com/apple/swift-format) for full options.
+Create a `.swiftformat` configuration file in your source folder for projects and package root for packages. See [swift-format documentation](https://github.com/apple/swift-format) for full options.
 
 Example:
 
