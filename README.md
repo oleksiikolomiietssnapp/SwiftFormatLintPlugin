@@ -64,13 +64,13 @@ The `Lint` plugin works automatically in Swift packages. For Xcode projects (Xco
 
 ### `.swiftformat` File Placement
 
-Place the `.swiftformat` configuration file in your **project folder** (where your source files are), not inside `.xcodeproj`:
+Place the `.swiftformat` configuration file in your **source folder** (where your Swift source files are), not at the project root or inside `.xcodeproj`:
 
 ```
-MyApp/                          ← Project folder (place .swiftformat HERE)
-├── MyApp.xcodeproj/            ← Project file (NOT here)
-├── .swiftformat                ← Configuration file
-├── MyApp/                       ← Source folder
+MyApp/                          ← Project folder (NOT here)
+├── MyApp.xcodeproj/            ← Xcode project (NOT here)
+├── MyApp/                       ← Source folder - place .swiftformat HERE!
+│   ├── .swiftformat            ← Configuration file
 │   ├── ContentView.swift
 │   ├── MyAppApp.swift
 │   └── Assets.xcassets
@@ -79,13 +79,13 @@ MyApp/                          ← Project folder (place .swiftformat HERE)
 ```
 
 **Important:** For the Lint plugin to find the configuration:
-1. Place `.swiftformat` in the project root (same level as `.xcodeproj`)
+1. Place `.swiftformat` in your source folder (same folder as your `.swift` files)
 2. Add it to your Xcode project in the file navigator (so Xcode tracks it)
 3. The SDK will automatically discover it during the build process
 
 ## Configuration
 
-Create a `.swiftformat` configuration file in your project root. See [swift-format documentation](https://github.com/apple/swift-format) for full options.
+Create a `.swiftformat` configuration file in your source folder. See [swift-format documentation](https://github.com/apple/swift-format) for full options.
 
 Example:
 
@@ -131,7 +131,7 @@ The Lint plugin has a 5-minute timeout to prevent indefinite hangs, but extremel
 The Lint plugin can't locate your configuration file, so it uses swift-format defaults.
 
 **Solution:**
-- Verify `.swiftformat` is in your **project root** (same folder level as `.xcodeproj`), not inside `.xcodeproj` or in subdirectories
+- Verify `.swiftformat` is in your **source folder** (where your `.swift` files are), not at the project root or inside `.xcodeproj`
 - Confirm the file is added to your Xcode project (visible in file navigator)
 - For Xcode projects, the file must be explicitly added to the target in Build Phases
 - Check file permissions: `ls -la .swiftformat` (should be readable)
@@ -142,7 +142,7 @@ The Lint plugin can't locate your configuration file, so it uses swift-format de
 This is normal if you don't have a `.swiftformat` configuration file. The plugin will use swift-format's default rules.
 
 **Solution (optional):**
-- Create `.swiftformat` in your project root to customize rules
+- Create `.swiftformat` in your source folder to customize rules
 - See [swift-format documentation](https://github.com/apple/swift-format) for configuration options
 
 ### FormatPlugin fails with "Permission denied"
