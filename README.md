@@ -64,7 +64,7 @@ The `Lint` plugin works automatically in Swift packages. For Xcode projects (Xco
 
 ### `.swiftformat` File Placement
 
-Place the `.swiftformat` configuration file in your **source folder** (where your Swift source files are), not at the project root or inside `.xcodeproj`:
+Place the `.swiftformat` configuration file in your **source folder** (where your Swift source files are), not at the project root or alongside `.xcodeproj`:
 
 ```
 MyApp/                          ← Project folder (NOT here)
@@ -142,7 +142,7 @@ The Lint plugin can't locate your configuration file, so it uses swift-format de
 This is normal if you don't have a `.swiftformat` configuration file. The plugin will use swift-format's default rules.
 
 **Solution (optional):**
-- Create `.swiftformat` in your source folder to customize rules
+- Create `.swiftformat` in your source folder for projects and package root for packages to customize rules
 - See [swift-format documentation](https://github.com/apple/swift-format) for configuration options
 
 ### FormatPlugin fails with "Permission denied"
