@@ -68,8 +68,8 @@ Place the `.swiftformat` configuration file in your **source folder** (where you
 
 ```
 MyApp/                          ← Project folder (NOT here)
-├── MyApp.xcodeproj/            ← Xcode project (NOT here)
-├── MyApp/                       ← Source folder - place .swiftformat HERE!
+├── MyApp.xcodeproj/
+├── MyApp/                      ← Source folder - place .swiftformat HERE!
 │   ├── .swiftformat            ← Configuration file
 │   ├── ContentView.swift
 │   ├── MyAppApp.swift
@@ -79,7 +79,7 @@ MyApp/                          ← Project folder (NOT here)
 ```
 
 **Important:** For the Lint plugin to find the configuration:
-1. Place `.swiftformat` in your source folder (same folder as your `.swift` files)
+1. Place `.swiftformat` in your source folder
 2. Add it to your Xcode project in the file navigator (so Xcode tracks it)
 3. The SDK will automatically discover it during the build process
 
