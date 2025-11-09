@@ -60,11 +60,32 @@ The `Lint` plugin works automatically in Swift packages. For Xcode projects (Xco
 
 1. File → Add Package Dependencies → Add SwiftFormatLintPlugin
 2. Select target → Build Phases → Run Build Tool Plug-ins → "+" → Add "Lint"
-3. Create `.swiftformat` in your project root and add it to Xcode project (not just filesystem)
+3. **Create `.swiftformat` configuration file** (see below for placement)
+
+### `.swiftformat` File Placement
+
+Place the `.swiftformat` configuration file in your **project folder** (where your source files are), not inside `.xcodeproj`:
+
+```
+MyApp/                          ← Project folder (place .swiftformat HERE)
+├── MyApp.xcodeproj/            ← Project file (NOT here)
+├── .swiftformat                ← Configuration file
+├── MyApp/                       ← Source folder
+│   ├── ContentView.swift
+│   ├── MyAppApp.swift
+│   └── Assets.xcassets
+└── MyAppTests/
+    └── MyAppTests.swift
+```
+
+**Important:** For the Lint plugin to find the configuration:
+1. Place `.swiftformat` in the project root (same level as `.xcodeproj`)
+2. Add it to your Xcode project in the file navigator (so Xcode tracks it)
+3. The SDK will automatically discover it during the build process
 
 ## Configuration
 
-Create a `.swiftformat` configuration file in your package root. See [swift-format documentation](https://github.com/apple/swift-format) for full options.
+Create a `.swiftformat` configuration file in your project root. See [swift-format documentation](https://github.com/apple/swift-format) for full options.
 
 Example:
 
@@ -105,12 +126,23 @@ The Lint plugin has a 5-minute timeout to prevent indefinite hangs, but extremel
 - Try building a smaller target first
 - Disable other background processes consuming I/O
 
+### Lint plugin not finding `.swiftformat` configuration
+
+The Lint plugin can't locate your configuration file, so it uses swift-format defaults.
+
+**Solution:**
+- Verify `.swiftformat` is in your **project root** (same folder level as `.xcodeproj`), not inside `.xcodeproj` or in subdirectories
+- Confirm the file is added to your Xcode project (visible in file navigator)
+- For Xcode projects, the file must be explicitly added to the target in Build Phases
+- Check file permissions: `ls -la .swiftformat` (should be readable)
+- Build with verbose output to see if the plugin finds the config: `xcodebuild -verbose`
+
 ### "Configuration file not found" warning
 
 This is normal if you don't have a `.swiftformat` configuration file. The plugin will use swift-format's default rules.
 
 **Solution (optional):**
-- Create `.swiftformat` in your package root to customize rules
+- Create `.swiftformat` in your project root to customize rules
 - See [swift-format documentation](https://github.com/apple/swift-format) for configuration options
 
 ### FormatPlugin fails with "Permission denied"
@@ -127,7 +159,7 @@ The Format plugin needs write permission to your source files.
 This is normal behavior. The Lint plugin runs silently unless there are formatting issues.
 
 **To verify it's running:**
-- Build with verbose output: `swift build -v`
+- Build with verbose output: `swift build -v` or `xcodebuild -verbose`
 - Look for "Running SwiftFormat Lint" in the output
 - The plugin will show warnings if formatting issues are found
 
