@@ -1,5 +1,8 @@
 # SwiftFormatLintPlugin
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Swift Package Index](https://img.shields.io/badge/SPM-compatible-brightgreen.svg?style=flat)](https://swiftpackageindex.com/Snapp-Mobile/SwiftFormatLintPlugin)
+
 A Swift Package Manager plugin that integrates swift-format linting and formatting into your build pipeline.
 
 ## Overview
