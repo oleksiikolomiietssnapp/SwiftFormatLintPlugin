@@ -8,7 +8,7 @@ Two plugins for code formatting with **parallel processing** and **dual config s
 
 | Plugin | Type | Usage | Availability |
 |--------|------|-------|---------------|
-| **Lint** | Build tool | Auto-check at build time | Swift Packages & Xcode projects (Xcode 14+) |
+| **Lint** | Build tool | Auto-check at build time | Swift Packages & Xcode projects |
 | **Format** | Command | On-demand formatting | Swift Packages only |
 
 ## Quick Setup
@@ -18,7 +18,9 @@ Two plugins for code formatting with **parallel processing** and **dual config s
 Add to `Package.swift`:
 ```swift
 .package(url: "https://github.com/Snapp-Mobile/SwiftFormatLintPlugin.git", from: "1.0.4"),
+```
 
+```swift
 .target(
     name: "YourTarget",
     plugins: [.plugin(name: "Lint", package: "SwiftFormatLintPlugin")]
@@ -73,7 +75,7 @@ swift-format --in-place --recursive --parallel --configuration YourApp/.swiftfor
 
 - Swift 6.0+
 - swift-format tool (included in Xcode)
-- Xcode 14+ (for Xcode project support)
+- Xcode 14+ (required for Xcode project support)
 
 ## Troubleshooting
 
